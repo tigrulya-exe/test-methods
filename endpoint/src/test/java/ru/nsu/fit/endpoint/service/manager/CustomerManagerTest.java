@@ -52,6 +52,8 @@ public class CustomerManagerTest {
         Assert.assertEquals(1, Mockito.mockingDetails(dbService).getInvocations().size());
     }
 
+    // Как не надо писать тест...
+    // Используйте expected exception аннотации...
     @Test
     public void testCreateCustomerWithNullArgument() {
         try {
@@ -61,6 +63,8 @@ public class CustomerManagerTest {
         }
     }
 
+    // Как не надо писать тест...
+    // Используйте expected exception аннотации...
     @Test
     public void testCreateCustomerWithEasyPassword() {
         try {
