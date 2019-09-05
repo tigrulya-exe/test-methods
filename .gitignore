@@ -1,2 +1,5 @@
 *.iml
 */.idea
+*.class
+endpoint/target
+endpoint_tests/target
