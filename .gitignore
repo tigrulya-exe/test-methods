@@ -1,5 +1,14 @@
+.idea
+.gradle
 *.iml
 */.idea
 *.class
-endpoint/target
+tm-backend/target
+tm-backend/build
+tm-backend/.build
+tm-backend/node_modules
 endpoint_tests/target
+endpoint_tests/build
+
+tm-frontend/node_modules
+tm-frontend/build
