@@ -18,6 +18,7 @@ services:
       - 3306
     volumes:
       - mysql_db_data:/var/lib/mysql
+      - "./db_create.sql:/docker-entrypoint-initdb.d/setup.sql"
 
   adminer_container:
     image: adminer
@@ -38,8 +39,6 @@ services:
     build:
       context: ./tm-backend
       dockerfile: Dockerfile.dev
-    volumes:
-      - "./tm-backend/build/libs:/usr/local/tomcat/webapps/"
     expose:
       - 8089
     ports:
@@ -51,8 +50,6 @@ services:
     build:
       context: ./tm-frontend
       dockerfile: Dockerfile.dev
-    volumes:
-      - "./tm-frontend/build/:/usr/local/tomcat/webapps/"
     expose:
       - 8090
     ports:

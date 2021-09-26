@@ -1,13 +1,9 @@
-# Step 1: Create user (execute under root)
-# Note: if you want to see all users: select * from mysql.user;
 CREATE USER 'user'@'%' IDENTIFIED BY 'pass';
 GRANT ALL PRIVILEGES ON *.* TO 'user'@'%' WITH GRANT OPTION;
 
-# Step 2: Create database (execute under the user)
 CREATE DATABASE testmethods;
 USE testmethods;
 
-# Step 3: Create tables
 CREATE TABLE `CUSTOMER` (
 	`id` TEXT NOT NULL,
 	`first_name` TEXT NOT NULL,
