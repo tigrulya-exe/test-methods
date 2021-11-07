@@ -1,12 +1,12 @@
 package org.nsu.fit.tm_backend.manager;
 
-import org.slf4j.Logger;
 import org.nsu.fit.tm_backend.database.IDBService;
 import org.nsu.fit.tm_backend.database.data.ContactPojo;
 import org.nsu.fit.tm_backend.database.data.CustomerPojo;
 import org.nsu.fit.tm_backend.database.data.TopUpBalancePojo;
 import org.nsu.fit.tm_backend.manager.auth.data.AuthenticatedUserDetails;
 import org.nsu.fit.tm_backend.shared.Globals;
+import org.slf4j.Logger;
 
 import java.util.List;
 import java.util.UUID;
@@ -42,8 +42,13 @@ public class CustomerManager extends ParentManager {
             throw new IllegalArgumentException("Password is very easy.");
         }
 
-        // Лабораторная 2: добавить код который бы проверял, что нет customer'а c таким же login (email'ом).
-        // Попробовать добавить другие ограничения, посмотреть как быстро растет кодовая база тестов.
+        if (lookupCustomer(customer.login) != null) {
+            throw new IllegalArgumentException("Login already in use.");
+        }
+
+        if (customer.balance != 0) {
+            throw new IllegalArgumentException("Wrong balance.");
+        }
 
         return dbService.createCustomer(customer);
     }
@@ -89,6 +94,11 @@ public class CustomerManager extends ParentManager {
      * Метод добавляет к текущему баласу переданное значение, которое должно быть строго больше нуля.
      */
     public CustomerPojo topUpBalance(TopUpBalancePojo topUpBalancePojo) {
+
+        if (topUpBalancePojo.money <= 0) {
+            throw new IllegalArgumentException("Money to add should be positive");
+        }
+
         CustomerPojo customerPojo = dbService.getCustomer(topUpBalancePojo.customerId);
 
         customerPojo.balance += topUpBalancePojo.money;
