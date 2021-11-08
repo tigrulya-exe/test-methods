@@ -18,6 +18,8 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
@@ -69,8 +71,10 @@ public class StatisticOperationTest {
 
         verify(customerManager).getCustomer(customerIds.get(0));
         verify(customerManager).getCustomer(customerIds.get(1));
+        verify(customerManager, times(2)).getCustomer(any());
         verify(subscriptionManager).getSubscriptions(customerIds.get(0));
         verify(subscriptionManager).getSubscriptions(customerIds.get(1));
+        verify(subscriptionManager, times(2)).getSubscriptions(any());
         verifyNoMoreInteractions(customerManager);
         verifyNoMoreInteractions(subscriptionManager);
     }
