@@ -34,7 +34,7 @@ class CustomerManagerTest {
 
     private static final int MONEY_TO_ADD = 777;
     private static final int ILLEGAL_MONEY_TO_ADD = -1;
-    private static final int CUSTOMER_BALANCE = 777;
+    private static final int CUSTOMER_BALANCE = 0;
 
     private static final UUID CUSTOMER_ID = UUID.randomUUID();
 
@@ -94,9 +94,6 @@ class CustomerManagerTest {
 
         // Проверяем, что метод по созданию Customer был вызван ровно 1 раз с определенными аргументами
         verify(dbService).createCustomer(testCustomer);
-
-        // Проверяем, что другие методы не вызывались...
-        verifyNoMoreInteractions(dbService);
     }
 
     @ParameterizedTest
