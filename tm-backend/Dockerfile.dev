@@ -1,4 +1,4 @@
-FROM gradle:6.1.1-jdk8 AS GRADLE_BUILD
+FROM gradle:6.1.1-jdk11 AS GRADLE_BUILD
 WORKDIR /test-methods/tm-backend
 COPY ./ ./
 RUN gradle build
