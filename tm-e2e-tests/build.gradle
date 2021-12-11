@@ -52,6 +52,8 @@ dependencies {
     compile group:'org.glassfish.jersey.core', name: 'jersey-client', version: '2.19'
     compile group:'org.glassfish.jersey.media', name: 'jersey-media-json-jackson', version: '2.19'
 
+    compile group:'javax.activation', name: 'activation', version: '1.1.1'
+
     compile group:'io.qameta.allure', name: 'allure-testng', version: allureVersion
     compile group:'org.testng', name: 'testng', version: testngVersion
 

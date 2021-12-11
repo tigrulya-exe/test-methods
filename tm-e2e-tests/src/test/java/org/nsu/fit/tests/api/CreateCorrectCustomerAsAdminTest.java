@@ -7,7 +7,7 @@ import org.testng.annotations.Test;
 
 public class CreateCorrectCustomerAsAdminTest extends BaseITTest {
 
-    @Test(description = "Add correct customer")
+    @Test(description = "Create correct customer")
     @Severity(SeverityLevel.BLOCKER)
     @Feature("Customer feature.")
     public void createCorrectCustomer() {
