@@ -5,7 +5,9 @@ import com.github.javafaker.Internet;
 import com.github.javafaker.Name;
 import org.nsu.fit.services.rest.data.CustomerPojo;
 import org.nsu.fit.services.rest.data.PlanPojo;
+import org.nsu.fit.services.rest.data.SubscriptionPojo;
 
+import java.util.Random;
 import java.util.UUID;
 
 public class FakerGenerator implements UserGenerator {
@@ -22,7 +24,7 @@ public class FakerGenerator implements UserGenerator {
         contactPojo.lastName = nameGenerator.lastName();
         contactPojo.login = netStaffGenerator.emailAddress();
         contactPojo.pass = netStaffGenerator.password(6, 12);
-        contactPojo.balance = 0;
+        contactPojo.balance = 1000;
 
         return contactPojo;
     }
@@ -34,5 +36,16 @@ public class FakerGenerator implements UserGenerator {
                 .fee(300)
                 .name("name-" + UUID.randomUUID().toString().substring(0, 6))
                 .build();
+    }
+
+    public SubscriptionPojo generateSubscription() {
+        return SubscriptionPojo.builder()
+            .id(UUID.randomUUID())
+            .customerId(UUID.randomUUID())
+            .planId(UUID.randomUUID())
+            .planName("name-" + UUID.randomUUID().toString().substring(0, 6))
+            .planDetails("details-" + UUID.randomUUID().toString().substring(0, 20))
+            .planFee(100)
+            .build();
     }
 }

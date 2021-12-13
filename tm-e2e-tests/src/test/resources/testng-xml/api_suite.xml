@@ -1,12 +1,18 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite verbose="1" name="API Tests" annotations="JDK" parallel="tests">
-    <test name="AuthTest">
+    <test name="IT Tests">
         <classes>
             <class name="org.nsu.fit.tests.api.AuthTest" />
             <class name="org.nsu.fit.tests.api.CreateCorrectCustomerAsAdminTest" />
+            <class name="org.nsu.fit.tests.api.CreateCorrectPlanAsAdminTest" />
             <class name="org.nsu.fit.tests.api.TryToCreateResourcesAsCustomer" />
             <class name="org.nsu.fit.tests.api.TryToDeleteResourcesAsCustomer" />
             <class name="org.nsu.fit.tests.api.GetCurrentUserTest" />
+            <class name="org.nsu.fit.tests.api.CreateCorrectSubscriptionTest" />
+            <class name="org.nsu.fit.tests.api.DeleteSubscriptionTest" />
+            <class name="org.nsu.fit.tests.api.GetAvailablePlansTest" />
+            <class name="org.nsu.fit.tests.api.GetAvailableSubscriptionsTest" />
+            <class name="org.nsu.fit.tests.api.TryToCreateIncorrectSubscriptionTest" />
         </classes>
     </test>
 </suite>

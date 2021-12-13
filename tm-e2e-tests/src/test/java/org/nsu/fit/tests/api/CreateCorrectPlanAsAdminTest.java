@@ -3,6 +3,8 @@ package org.nsu.fit.tests.api;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Severity;
 import io.qameta.allure.SeverityLevel;
+import org.nsu.fit.services.rest.data.PlanPojo;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 public class CreateCorrectPlanAsAdminTest extends BaseITTest {
@@ -11,9 +13,8 @@ public class CreateCorrectPlanAsAdminTest extends BaseITTest {
     @Severity(SeverityLevel.BLOCKER)
     @Feature("Plan feature.")
     public void createCorrectPlan() {
-        restClient.createPlan(
-                fakerGenerator.generatePlan(),
-                adminToken
-        );
+        PlanPojo before = fakerGenerator.generatePlan();
+        PlanPojo after = restClient.createPlan(before, adminToken);
+        Assert.assertEquals(before.getName(), after.getName());
     }
 }

@@ -16,6 +16,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.Optional;
 import java.util.function.BiFunction;
+import java.util.function.Predicate;
 
 import static javax.ws.rs.core.Response.Status.Family.CLIENT_ERROR;
 import static javax.ws.rs.core.Response.Status.Family.SERVER_ERROR;
@@ -50,7 +51,6 @@ public class HttpClient {
     ) {
         // Лабораторная 3: Добавить обработку Responses и Errors. Выводите их в лог.
         // Подумайте почему в filter нет Response чтобы можно было удобно его сохранить.
-        // TODO: вроде сделал, глянь вторую строчку коммента
         Invocation.Builder request = client
                 .target(baseUrl)
                 .path(path)
@@ -65,7 +65,10 @@ public class HttpClient {
         String jsonBody = getBody(response, String.class);
 
         Logger.debug("Response body --" + jsonBody);
-        return JsonMapper.fromJson(jsonBody, responseType);
+        return Optional.of(jsonBody)
+            .filter(str -> !str.isEmpty())
+            .map(b -> JsonMapper.fromJson(jsonBody, responseType))
+            .orElse(null);
     }
 
     private static <V> V getBody(Response response, Class<V> clazz) {

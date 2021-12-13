@@ -1,7 +1,7 @@
 FROM gradle:6.1.1-jdk11 AS GRADLE_BUILD
 WORKDIR /test-methods/tm-backend
 COPY ./ ./
-RUN gradle build
+RUN gradle build -x test
 
 FROM tomcat:9.0
 RUN apt-get update && apt-get -y upgrade
