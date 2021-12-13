@@ -21,11 +21,38 @@ public class PlanManager extends ParentManager {
      * fee - больше либо равно 0 но меньше либо равно 5000.
      */
     public PlanPojo createPlan(PlanPojo plan) {
+        if (plan == null) {
+            throw new IllegalArgumentException("Argument 'plan' is null.");
+        }
+
+        if (plan.name == null) {
+            throw new IllegalArgumentException("Field 'plan.name' is null.");
+        }
+
+        if (plan.name.length() < 2 || plan.name.length() > 128) {
+            throw new IllegalArgumentException("Name's length should be more or equal 2 symbols and less or equal 128 symbols.");
+        }
+
+        if (lookupPlan(plan.name) != null) {
+            throw new IllegalArgumentException("Name already in use.");
+        }
+
+        if (plan.fee < 0 || plan.fee > 5000 ) {
+            throw new IllegalArgumentException("Fee should be more or equal 0 and less or equal 5000");
+        }
+
         return dbService.createPlan(plan);
     }
 
     public void deletePlan(UUID id) {
         dbService.deletePlan(id);
+    }
+
+    public PlanPojo lookupPlan(String name) {
+        return dbService.getPlans().stream()
+                .filter(x -> x.name.equals(name))
+                .findFirst()
+                .orElse(null);
     }
 
     /**

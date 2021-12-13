@@ -1,13 +1,12 @@
 package org.nsu.fit.services.rest.data;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
+@AllArgsConstructor
+@Getter
 public class CredentialsPojo {
-    @JsonProperty("login")
-    public String login;
+    private final String login;
 
-    @JsonProperty("pass")
-    public String pass;
+    private final String pass;
 }

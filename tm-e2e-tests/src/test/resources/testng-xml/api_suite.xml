@@ -3,6 +3,10 @@
     <test name="AuthTest">
         <classes>
             <class name="org.nsu.fit.tests.api.AuthTest" />
+            <class name="org.nsu.fit.tests.api.CreateCorrectCustomerAsAdminTest" />
+            <class name="org.nsu.fit.tests.api.TryToCreateResourcesAsCustomer" />
+            <class name="org.nsu.fit.tests.api.TryToDeleteResourcesAsCustomer" />
+            <class name="org.nsu.fit.tests.api.GetCurrentUserTest" />
         </classes>
     </test>
 </suite>
