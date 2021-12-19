@@ -6,8 +6,10 @@ import org.nsu.fit.services.rest.data.AccountTokenPojo;
 import org.nsu.fit.services.rest.data.CredentialsPojo;
 import org.nsu.fit.services.rest.data.CustomerPojo;
 import org.nsu.fit.services.rest.data.PlanPojo;
+import org.nsu.fit.services.rest.data.SubscriptionPojo;
 import org.nsu.fit.shared.JsonMapper;
 
+import java.util.List;
 import java.util.UUID;
 
 public class RestApiClient {
@@ -62,6 +64,27 @@ public class RestApiClient {
 
     public void deletePlan(UUID id, AccountTokenPojo accountToken) {
         httpClient.delete("plans/" + id, Void.class, accountToken);
+    }
+
+    public List<PlanPojo> getAvailablePlans(AccountTokenPojo accountToken) {
+        return httpClient.get("available_plans", List.class, accountToken);
+    }
+
+    public SubscriptionPojo createSubscription(SubscriptionPojo subPojo, AccountTokenPojo accountToken) {
+        return httpClient.post(
+            "subscriptions",
+            JsonMapper.toJson(subPojo, true),
+            SubscriptionPojo.class,
+            accountToken
+        );
+    }
+
+    public void deleteSubscription(UUID id, AccountTokenPojo accountToken) {
+        httpClient.delete("subscriptions/" + id, Void.class, accountToken);
+    }
+
+    public List<SubscriptionPojo> getAvailableSubscriptions(AccountTokenPojo accountToken) {
+        return httpClient.get("available_subscriptions", List.class, accountToken);
     }
 
     public CustomerPojo getCurrentUserProfile(AccountTokenPojo accountToken) {

@@ -21,6 +21,18 @@ public class SubscriptionManager extends ParentManager {
      * 2. Стоймость подписки не превышает текущего баланса кастомера и после покупки вычитается из его баласа.
      */
     public SubscriptionPojo createSubscription(SubscriptionPojo subscriptionPojo) {
+        boolean subWithSamePlanExists = dbService.getSubscriptions(subscriptionPojo.customerId).stream()
+            .anyMatch(sub -> sub.getPlanId() == subscriptionPojo.getPlanId());
+        if (subWithSamePlanExists) {
+            throw new IllegalArgumentException(
+                "Subscription can't be created, because user already has subscription with the same plan.");
+        }
+
+        int userBalance = dbService.getCustomer(subscriptionPojo.getCustomerId()).getBalance();
+        if (userBalance < subscriptionPojo.getPlanFee()) {
+            throw new IllegalArgumentException(
+                "Not enough money in user's balance to create subscription");
+        }
         return dbService.createSubscription(subscriptionPojo);
     }
 

@@ -46,9 +46,9 @@ public class CustomerManager extends ParentManager {
             throw new IllegalArgumentException("Login already in use.");
         }
 
-        if (customer.balance != 0) {
-            throw new IllegalArgumentException("Wrong balance.");
-        }
+//        if (customer.balance != 0) {
+//            throw new IllegalArgumentException("Wrong balance.");
+//        }
 
         return dbService.createCustomer(customer);
     }
