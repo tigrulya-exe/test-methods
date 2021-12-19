@@ -121,12 +121,13 @@ function getAvailableSubscriptions() {
     return fetch(`${config.apiUrl}/available_subscriptions`, requestOptions).then(handleResponse);
 }
 
-function createSubscription(planId) {
+function createSubscription(plan) {
     const requestOptions = {
         method: 'POST',
         headers: { ...authHeader(), 'Content-Type': 'application/json' },
         body: JSON.stringify({
-            "plan_id": planId
+            "plan_id": plan.id,
+            "plan_fee": plan.fee
         })
     };
 

@@ -1,22 +1,18 @@
 package org.nsu.fit.services.rest;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import lombok.RequiredArgsConstructor;
 import org.glassfish.jersey.client.ClientConfig;
 import org.nsu.fit.services.log.Logger;
 import org.nsu.fit.services.rest.data.AccountTokenPojo;
 import org.nsu.fit.shared.JsonMapper;
 
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.ClientRequestContext;
-import javax.ws.rs.client.ClientRequestFilter;
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.client.Invocation;
+import javax.ws.rs.client.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.lang.reflect.Type;
 import java.util.Optional;
 import java.util.function.BiFunction;
-import java.util.function.Predicate;
 
 import static javax.ws.rs.core.Response.Status.Family.CLIENT_ERROR;
 import static javax.ws.rs.core.Response.Status.Family.SERVER_ERROR;
@@ -34,6 +30,11 @@ public class HttpClient {
         return doJsonRequest((req, ignored) -> req.get(), path, null, responseType, accountToken);
     }
 
+    // TODO: соре Саня, мне было лень чето придумывать
+    public <R> R get(String path, TypeReference<R> responseType, AccountTokenPojo accountToken) {
+        return doJsonRequest((req, ignored) -> req.get(), path, null, responseType, accountToken);
+    }
+
     public <R> R delete(String path, Class<R> responseType, AccountTokenPojo accountToken) {
         return doJsonRequest((req, ignored) -> req.delete(), path, null, responseType, accountToken);
     }
@@ -47,6 +48,21 @@ public class HttpClient {
             String path,
             String body,
             Class<R> responseType,
+            AccountTokenPojo accountToken
+    ) {
+        return doJsonRequest(methodHandler, path, body, new TypeReference<R>() {
+            @Override
+            public Type getType() {
+                return responseType;
+            }
+        }, accountToken);
+    }
+
+    private <R> R doJsonRequest(
+            BiFunction<Invocation.Builder, Entity<?>, Response> methodHandler,
+            String path,
+            String body,
+            TypeReference<R> responseType,
             AccountTokenPojo accountToken
     ) {
         // Лабораторная 3: Добавить обработку Responses и Errors. Выводите их в лог.
@@ -66,9 +82,9 @@ public class HttpClient {
 
         Logger.debug("Response body --" + jsonBody);
         return Optional.of(jsonBody)
-            .filter(str -> !str.isEmpty())
-            .map(b -> JsonMapper.fromJson(jsonBody, responseType))
-            .orElse(null);
+                .filter(str -> !str.isEmpty())
+                .map(b -> JsonMapper.fromJson(jsonBody, responseType))
+                .orElse(null);
     }
 
     private static <V> V getBody(Response response, Class<V> clazz) {

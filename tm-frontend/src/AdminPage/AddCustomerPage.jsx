@@ -70,7 +70,7 @@ class AddCustomerPage extends React.Component {
 
                 <ButtonToolbar aria-label="Toolbar with button groups">
                     <ButtonGroup className="mr-2" aria-label="First group">
-                        <Button onClick={handleClick}>Back</Button>
+                        <Button onClick={handleClick} id="back-button">Back</Button>
                     </ButtonGroup>
                     <ButtonGroup className="mr-2" aria-label="Second group">
                         <Button type="submit" className="btn btn-primary btn-block">Create</Button>
