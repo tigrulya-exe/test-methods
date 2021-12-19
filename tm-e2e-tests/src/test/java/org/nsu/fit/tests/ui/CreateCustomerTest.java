@@ -10,13 +10,7 @@ import org.testng.annotations.Test;
 import org.nsu.fit.services.browser.Browser;
 import org.nsu.fit.services.browser.BrowserService;
 
-public class CreateCustomerTest {
-    private Browser browser = null;
-
-    @BeforeClass
-    public void beforeClass() {
-        browser = BrowserService.openNewBrowser();
-    }
+public class CreateCustomerTest extends BaseUITest {
 
     @Test(description = "Create customer via UI.")
     @Severity(SeverityLevel.BLOCKER)
@@ -32,12 +26,5 @@ public class CreateCustomerTest {
 
         // Лабораторная 4: Проверить что customer создан с ранее переданными полями.
         // Решить проблему с генерацией случайных данных.
-    }
-
-    @AfterClass
-    public void afterClass() {
-        if (browser != null) {
-            browser.close();
-        }
     }
 }
