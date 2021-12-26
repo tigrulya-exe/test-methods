@@ -1,12 +1,9 @@
 package org.nsu.fit.services.rest;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import org.nsu.fit.services.generator.FakerGenerator;
 import org.nsu.fit.services.generator.UserGenerator;
-import org.nsu.fit.services.rest.data.AccountTokenPojo;
-import org.nsu.fit.services.rest.data.CredentialsPojo;
-import org.nsu.fit.services.rest.data.CustomerPojo;
-import org.nsu.fit.services.rest.data.PlanPojo;
-import org.nsu.fit.services.rest.data.SubscriptionPojo;
+import org.nsu.fit.services.rest.data.*;
 import org.nsu.fit.shared.JsonMapper;
 
 import java.util.List;
@@ -67,15 +64,24 @@ public class RestApiClient {
     }
 
     public List<PlanPojo> getAvailablePlans(AccountTokenPojo accountToken) {
-        return httpClient.get("available_plans", List.class, accountToken);
+        return httpClient.get("available_plans", new TypeReference<List<PlanPojo>>() {
+        }, accountToken);
+    }
+
+    public PlanPojo getPlanByName(String name, AccountTokenPojo accountToken) {
+        return getAvailablePlans(accountToken)
+                .stream()
+                .filter(plan -> name.equals(plan.getName()))
+                .findFirst()
+                .orElseThrow(IllegalArgumentException::new);
     }
 
     public SubscriptionPojo createSubscription(SubscriptionPojo subPojo, AccountTokenPojo accountToken) {
         return httpClient.post(
-            "subscriptions",
-            JsonMapper.toJson(subPojo, true),
-            SubscriptionPojo.class,
-            accountToken
+                "subscriptions",
+                JsonMapper.toJson(subPojo, true),
+                SubscriptionPojo.class,
+                accountToken
         );
     }
 
@@ -84,7 +90,8 @@ public class RestApiClient {
     }
 
     public List<SubscriptionPojo> getAvailableSubscriptions(AccountTokenPojo accountToken) {
-        return httpClient.get("available_subscriptions", List.class, accountToken);
+        return httpClient.get("available_subscriptions", new TypeReference<List<SubscriptionPojo>>() {
+        }, accountToken);
     }
 
     public CustomerPojo getCurrentUserProfile(AccountTokenPojo accountToken) {

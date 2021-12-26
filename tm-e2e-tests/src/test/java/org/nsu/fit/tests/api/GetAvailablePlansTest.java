@@ -10,7 +10,7 @@ public class GetAvailablePlansTest extends BaseITTest {
     @Test(description = "Get available plans")
     @Severity(SeverityLevel.CRITICAL)
     @Feature("Customer feature.")
-    public void createCorrectCustomer() {
+    public void getAvailablePlans() {
         restClient.getAvailablePlans(customerToken);
     }
 }

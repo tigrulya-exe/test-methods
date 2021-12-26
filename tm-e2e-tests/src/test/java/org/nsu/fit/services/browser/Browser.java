@@ -10,7 +10,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.Closeable;
 import java.io.File;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -36,11 +35,7 @@ public class Browser implements Closeable {
             // we use Windows platform for development only and not for AT launch.
             // For launch AT regression, we use Linux platform.
             if (System.getProperty("os.name").toLowerCase().contains("win")) {
-                // Лабораторная 4: Указать путь до chromedriver на вашей системе.
-                // Для того чтобы подобрать нужный chromedriver, необходимо посмотреть версию браузера Chrome
-                // на системе, на которой будут запускаться тесты и скачать соотвествующий ей chromedriver с сайта:
-                // https://chromedriver.chromium.org/downloads
-                System.setProperty("webdriver.chrome.driver", "C:/Tools/chromedriver/chromedriver.exe");
+                System.setProperty("webdriver.chrome.driver", "E:\\StudyData\\TestMethods\\chromedriver.exe");
                 chromeOptions.setHeadless(Boolean.parseBoolean(System.getProperty("headless")));
                 webDriver = new ChromeDriver(chromeOptions);
             } else {
@@ -102,9 +97,21 @@ public class Browser implements Closeable {
         return webDriver.findElements(element).size() != 0;
     }
 
+    public boolean waitPage() {
+        WebDriverWait wait = new WebDriverWait(webDriver, 10);
+        return wait.until(webDriver -> ((JavascriptExecutor) webDriver)
+                .executeScript("return document.readyState")
+                .equals("complete"));
+    }
+
+    public boolean containsTitle(String title) {
+        WebDriverWait wait = new WebDriverWait(webDriver, 3);
+        return wait.until(ExpectedConditions.urlContains(title));
+    }
+
     @Attachment(value = "Page screenshot", type = "image/png")
     public byte[] makeScreenshot() {
-        return ((TakesScreenshot)webDriver).getScreenshotAs(OutputType.BYTES);
+        return ((TakesScreenshot) webDriver).getScreenshotAs(OutputType.BYTES);
     }
 
     @Override

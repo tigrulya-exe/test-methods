@@ -4,13 +4,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.nsu.fit.tm_backend.MainFactory;
 import org.nsu.fit.tm_backend.database.DBService;
-import org.nsu.fit.tm_backend.database.data.ContactPojo;
-import org.nsu.fit.tm_backend.database.data.CredentialsPojo;
-import org.nsu.fit.tm_backend.database.data.CustomerPojo;
-import org.nsu.fit.tm_backend.database.data.HealthCheckPojo;
-import org.nsu.fit.tm_backend.database.data.PlanPojo;
-import org.nsu.fit.tm_backend.database.data.SubscriptionPojo;
-import org.nsu.fit.tm_backend.database.data.TopUpBalancePojo;
+import org.nsu.fit.tm_backend.database.data.*;
 import org.nsu.fit.tm_backend.manager.auth.data.AuthenticatedUserDetails;
 import org.nsu.fit.tm_backend.shared.Authority;
 import org.nsu.fit.tm_backend.shared.JsonMapper;
@@ -18,20 +12,13 @@ import org.slf4j.LoggerFactory;
 
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.DefaultValue;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -69,10 +56,10 @@ public class RestService {
     @GET
     @Path("/me")
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({ Authority.ADMIN_ROLE, Authority.CUSTOMER_ROLE })
+    @RolesAllowed({Authority.ADMIN_ROLE, Authority.CUSTOMER_ROLE})
     public Response me(@Context SecurityContext securityContext) {
         try {
-            AuthenticatedUserDetails authenticatedUserDetails = (AuthenticatedUserDetails)securityContext.getUserPrincipal();
+            AuthenticatedUserDetails authenticatedUserDetails = (AuthenticatedUserDetails) securityContext.getUserPrincipal();
 
             ContactPojo contactPojo = MainFactory.getInstance()
                     .getCustomerManager()
@@ -88,10 +75,10 @@ public class RestService {
     @GET
     @Path("/customers")
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({ Authority.ADMIN_ROLE, Authority.CUSTOMER_ROLE })
+    @RolesAllowed({Authority.ADMIN_ROLE, Authority.CUSTOMER_ROLE})
     public Response getCustomers(@Context SecurityContext securityContext, @DefaultValue("") @QueryParam("login") String customerLogin) {
         try {
-            AuthenticatedUserDetails authenticatedUserDetails = (AuthenticatedUserDetails)securityContext.getUserPrincipal();
+            AuthenticatedUserDetails authenticatedUserDetails = (AuthenticatedUserDetails) securityContext.getUserPrincipal();
 
             if (authenticatedUserDetails.isCustomer()) {
                 customerLogin = authenticatedUserDetails.getName();
@@ -151,7 +138,7 @@ public class RestService {
     @RolesAllowed(Authority.CUSTOMER_ROLE)
     public Response topUpBalance(@Context SecurityContext securityContext, String topUpBalancePojoStr) {
         try {
-            AuthenticatedUserDetails authenticatedUserDetails = (AuthenticatedUserDetails)securityContext.getUserPrincipal();
+            AuthenticatedUserDetails authenticatedUserDetails = (AuthenticatedUserDetails) securityContext.getUserPrincipal();
 
             // convert json to object.
             TopUpBalancePojo topUpBalancePojo = JsonMapper.fromJson(topUpBalancePojoStr, TopUpBalancePojo.class);
@@ -190,14 +177,16 @@ public class RestService {
     @GET
     @Path("/available_plans")
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed(Authority.CUSTOMER_ROLE)
+    @RolesAllowed({Authority.CUSTOMER_ROLE, Authority.ADMIN_ROLE})
     public Response getAvailablePlans(@Context SecurityContext securityContext) {
         try {
-            AuthenticatedUserDetails authenticatedUserDetails = (AuthenticatedUserDetails)securityContext.getUserPrincipal();
+            AuthenticatedUserDetails authenticatedUserDetails = (AuthenticatedUserDetails) securityContext.getUserPrincipal();
 
             List<PlanPojo> plans = MainFactory.getInstance()
                     .getPlanManager()
-                    .getPlans(UUID.fromString(authenticatedUserDetails.getUserId()));
+                    .getPlans(Optional.ofNullable(authenticatedUserDetails.getUserId())
+                            .map(UUID::fromString)
+                            .orElse(null));
 
             return Response.ok().entity(JsonMapper.toJson(plans, true)).build();
         } catch (IllegalArgumentException ex) {
@@ -248,7 +237,7 @@ public class RestService {
     @RolesAllowed(Authority.CUSTOMER_ROLE)
     public Response createSubscription(@Context SecurityContext securityContext, String subscriptionDataJson) {
         try {
-            AuthenticatedUserDetails authenticatedUserDetails = (AuthenticatedUserDetails)securityContext.getUserPrincipal();
+            AuthenticatedUserDetails authenticatedUserDetails = (AuthenticatedUserDetails) securityContext.getUserPrincipal();
 
             // convert json to object.
             SubscriptionPojo subscriptionPojo = JsonMapper.fromJson(subscriptionDataJson, SubscriptionPojo.class);
@@ -305,7 +294,7 @@ public class RestService {
     @RolesAllowed(Authority.CUSTOMER_ROLE)
     public Response getAvailableSubscriptions(@Context SecurityContext securityContext) {
         try {
-            AuthenticatedUserDetails authenticatedUserDetails = (AuthenticatedUserDetails)securityContext.getUserPrincipal();
+            AuthenticatedUserDetails authenticatedUserDetails = (AuthenticatedUserDetails) securityContext.getUserPrincipal();
 
             List<SubscriptionPojo> subscriptions = MainFactory.getInstance()
                     .getSubscriptionManager()

@@ -1,5 +1,6 @@
 package org.nsu.fit.tm_backend.manager;
 
+import org.nsu.fit.tm_backend.database.data.CustomerPojo;
 import org.slf4j.Logger;
 import org.nsu.fit.tm_backend.database.IDBService;
 import org.nsu.fit.tm_backend.database.data.PlanPojo;
@@ -7,6 +8,7 @@ import org.nsu.fit.tm_backend.database.data.SubscriptionPojo;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -28,11 +30,18 @@ public class SubscriptionManager extends ParentManager {
                 "Subscription can't be created, because user already has subscription with the same plan.");
         }
 
-        int userBalance = dbService.getCustomer(subscriptionPojo.getCustomerId()).getBalance();
-        if (userBalance < subscriptionPojo.getPlanFee()) {
+        CustomerPojo customer = dbService.getCustomer(subscriptionPojo.getCustomerId());
+        boolean notEnoughMoney = Optional.ofNullable(subscriptionPojo.getPlanFee())
+                .filter(fee -> customer.balance < fee)
+                .map(fee -> customer.balance -= fee)
+                .isPresent();
+
+        dbService.editCustomer(customer);
+        if (notEnoughMoney) {
             throw new IllegalArgumentException(
                 "Not enough money in user's balance to create subscription");
         }
+
         return dbService.createSubscription(subscriptionPojo);
     }
 

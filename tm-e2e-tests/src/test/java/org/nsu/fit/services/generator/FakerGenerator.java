@@ -7,7 +7,6 @@ import org.nsu.fit.services.rest.data.CustomerPojo;
 import org.nsu.fit.services.rest.data.PlanPojo;
 import org.nsu.fit.services.rest.data.SubscriptionPojo;
 
-import java.util.Random;
 import java.util.UUID;
 
 public class FakerGenerator implements UserGenerator {

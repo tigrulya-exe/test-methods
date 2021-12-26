@@ -48,11 +48,11 @@ function getAvailableSubscriptions() {
     function failure(error) { return { type: GET_AVAILABLE_SUBSCRIPTIONS_FAILURE, error } }
 }
 
-function createSubscription(planId) {
+function createSubscription(plan) {
     return dispatch => {
         dispatch(request());
 
-        apiService.createSubscription(planId)
+        apiService.createSubscription(plan)
             .then(
                 createdSubscription => {
                     dispatch(success(createdSubscription));

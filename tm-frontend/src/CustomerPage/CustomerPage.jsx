@@ -37,7 +37,10 @@ class CustomerPage extends React.Component {
                 setTimeout(() => {
                     resolve();
 
-                    this.props.dispatch(customerActions.createSubscription(oldData.id));
+                    this.props.dispatch(customerActions.createSubscription({
+                        id: oldData.id,
+                        fee: oldData.plan_fee
+                    }));
                 }, 600);
             })
 
