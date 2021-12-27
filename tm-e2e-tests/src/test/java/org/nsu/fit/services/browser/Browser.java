@@ -10,6 +10,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.Closeable;
 import java.io.File;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -35,7 +36,7 @@ public class Browser implements Closeable {
             // we use Windows platform for development only and not for AT launch.
             // For launch AT regression, we use Linux platform.
             if (System.getProperty("os.name").toLowerCase().contains("win")) {
-                System.setProperty("webdriver.chrome.driver", "E:\\StudyData\\TestMethods\\chromedriver.exe");
+                System.setProperty("webdriver.chrome.driver", "C:/Tools/chromedriver/chromedriver.exe");
                 chromeOptions.setHeadless(Boolean.parseBoolean(System.getProperty("headless")));
                 webDriver = new ChromeDriver(chromeOptions);
             } else {
@@ -84,6 +85,13 @@ public class Browser implements Closeable {
     public Browser typeText(By element, String text) {
         makeScreenshot();
         webDriver.findElement(element).sendKeys(text);
+        return this;
+    }
+
+    public Browser typeTextInLast(By element, String text) {
+        makeScreenshot();
+        List<WebElement> elements = webDriver.findElements(element);
+        elements.get(elements.size() - 1).sendKeys(text);
         return this;
     }
 

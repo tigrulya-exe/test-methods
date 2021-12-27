@@ -31,16 +31,16 @@ public class SubscriptionManager extends ParentManager {
         }
 
         CustomerPojo customer = dbService.getCustomer(subscriptionPojo.getCustomerId());
-        boolean notEnoughMoney = Optional.ofNullable(subscriptionPojo.getPlanFee())
-                .filter(fee -> customer.balance < fee)
+        boolean enoughMoney = Optional.ofNullable(subscriptionPojo.getPlanFee())
+                .filter(fee -> customer.balance >= fee)
                 .map(fee -> customer.balance -= fee)
                 .isPresent();
 
-        dbService.editCustomer(customer);
-        if (notEnoughMoney) {
+        if (!enoughMoney) {
             throw new IllegalArgumentException(
                 "Not enough money in user's balance to create subscription");
         }
+        dbService.editCustomer(customer);
 
         return dbService.createSubscription(subscriptionPojo);
     }
