@@ -50,6 +50,10 @@ public class RestApiClient {
         );
     }
 
+    public List<CustomerPojo> getCustomers(AccountTokenPojo accountToken) {
+        return httpClient.get("customers", new TypeReference<List<CustomerPojo>>() {}, accountToken);
+    }
+
     public PlanPojo createPlan(PlanPojo planPojo, AccountTokenPojo accountToken) {
         return httpClient.post(
                 "plans",
@@ -61,6 +65,10 @@ public class RestApiClient {
 
     public void deletePlan(UUID id, AccountTokenPojo accountToken) {
         httpClient.delete("plans/" + id, Void.class, accountToken);
+    }
+
+    public List<PlanPojo> getPlans(AccountTokenPojo accountToken) {
+        return httpClient.get("plans",  new TypeReference<List<PlanPojo>>() {}, accountToken);
     }
 
     public List<PlanPojo> getAvailablePlans(AccountTokenPojo accountToken) {
@@ -90,8 +98,8 @@ public class RestApiClient {
     }
 
     public List<SubscriptionPojo> getAvailableSubscriptions(AccountTokenPojo accountToken) {
-        return httpClient.get("available_subscriptions", new TypeReference<List<SubscriptionPojo>>() {
-        }, accountToken);
+        return httpClient.get("available_subscriptions", new TypeReference<List<SubscriptionPojo>>() {},
+            accountToken);
     }
 
     public CustomerPojo getCurrentUserProfile(AccountTokenPojo accountToken) {

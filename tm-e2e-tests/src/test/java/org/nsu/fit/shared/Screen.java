@@ -36,6 +36,10 @@ public class Screen {
         browser.click(By.xpath("//button[@title = '" + title + "']"));
     }
 
+    protected void clickButtonByTitle(String title, Object index) {
+        browser.click(By.xpath("(//button[@title = '" + title + "'])[" + index + "]"));
+    }
+
     protected void fillInputByName(String name, String newValue) {
         browser.typeText(
                 By.xpath("//input[@name = '" + name + "']"),

@@ -8,6 +8,10 @@
             <class name="org.nsu.fit.tests.ui.SubscribePlanTest" />
             <class name="org.nsu.fit.tests.ui.UnsubscribePlanTest" />
             <class name="org.nsu.fit.tests.ui.TopUpBalanceTest" />
+            <class name="org.nsu.fit.tests.ui.DeleteCustomerTest" />
+            <class name="org.nsu.fit.tests.ui.DeletePlanTest" />
+            <class name="org.nsu.fit.tests.ui.SearchCustomerTest" />
+            <class name="org.nsu.fit.tests.ui.SearchPlanTest" />
         </classes>
     </test>
 </suite>

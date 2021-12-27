@@ -34,8 +34,6 @@ public class SubscribePlanTest extends BaseUITest {
                 .clickSubmit()
                 .subscribeFirstPlan();
 
-        // TODO: надо от слипов по хорошему избавиться
-        Thread.sleep(1000);
         List<SubscriptionPojo> subscriptions = apiClient.getAvailableSubscriptions(userToken);
         Assert.assertFalse(subscriptions.isEmpty());
     }
